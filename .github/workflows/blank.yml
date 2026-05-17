@@ -6,7 +6,7 @@ jobs:
   windows-x64:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Python
         uses: actions/setup-python@v4
         with:
@@ -30,7 +30,7 @@ jobs:
   linux-x64:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -52,7 +52,7 @@ jobs:
   macos-x64:
     runs-on: macos-13  # 最后一代 Intel Mac runner
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Qt
         run: |
           curl -O https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
@@ -70,7 +70,7 @@ jobs:
   macos-arm64:
     runs-on: macos-14  # Apple Silicon runner
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Qt
         run: |
           curl -O https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
