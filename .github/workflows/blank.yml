@@ -11,12 +11,16 @@ jobs:
         run: |
           brew install xz
           brew install libpng
+          echo "libpng location:"
+          brew --prefix libpng
       - name: Build Qt
         run: |
           curl -L -o qt.tar.xz https://mirror.nju.edu.cn/qt/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
           tar xf qt.tar.xz
           cd qt-everywhere-src-5.15.9
           export CMAKE_OSX_ARCHITECTURES=arm64
+          export LIBPNG_CFLAGS="-I$(brew --prefix libpng)/include"
+          export LIBPNG_LIBS="-L$(brew --prefix libpng)/lib -lpng"
           ./configure -release -opensource -confirm-license \
             -nomake examples -nomake tests \
             -skip qtwebengine \
