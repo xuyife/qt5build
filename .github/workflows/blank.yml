@@ -21,7 +21,7 @@ jobs:
           configure.bat -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix %CD%\build
           nmake
           nmake install
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: qt5-windows-x64
           path: qt-everywhere-src-5.15.9/build
@@ -43,7 +43,7 @@ jobs:
           ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix $PWD/build
           make -j$(nproc)
           make install
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: qt5-linux-x64
           path: qt-everywhere-src-5.15.9/build
@@ -61,7 +61,7 @@ jobs:
           ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix $PWD/build -- -DCMAKE_OSX_ARCHITECTURES=x86_64
           make -j$(sysctl -n hw.logicalcpu)
           make install
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: qt5-macos-x64
           path: qt-everywhere-src-5.15.9/build
@@ -79,7 +79,7 @@ jobs:
           ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix $PWD/build -- -DCMAKE_OSX_ARCHITECTURES=arm64
           make -j$(sysctl -n hw.logicalcpu)
           make install
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: qt5-macos-arm64
           path: qt-everywhere-src-5.15.9/build
