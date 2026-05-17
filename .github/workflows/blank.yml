@@ -48,35 +48,23 @@ jobs:
           name: qt5-linux-x64
           path: qt-everywhere-src-5.15.9/build
 
-  # macOS x86_64
-  macos-x64:
-    runs-on: macos-13  # 最后一代 Intel Mac runner
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Qt
-        run: |
-          curl -O https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
-          tar xf qt-everywhere-opensource-src-5.15.9.tar.xz
-          cd qt-everywhere-src-5.15.9
-          ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix $PWD/build -- -DCMAKE_OSX_ARCHITECTURES=x86_64
-          make -j$(sysctl -n hw.logicalcpu)
-          make install
-      - uses: actions/upload-artifact@v4
-        with:
-          name: qt5-macos-x64
-          path: qt-everywhere-src-5.15.9/build
-
   # macOS arm64
   macos-arm64:
-    runs-on: macos-14  # Apple Silicon runner
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: brew install xz
       - name: Build Qt
         run: |
-          curl -O https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
-          tar xf qt-everywhere-opensource-src-5.15.9.tar.xz
+          curl -L -o qt.tar.xz https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
+          tar xf qt.tar.xz
           cd qt-everywhere-src-5.15.9
-          ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix $PWD/build -- -DCMAKE_OSX_ARCHITECTURES=arm64
+          ./configure -release -opensource -confirm-license \
+            -nomake examples -nomake tests \
+            -skip qtdeclarative -skip qtwebengine \
+            -prefix $PWD/build \
+            -- -DCMAKE_OSX_ARCHITECTURES=arm64
           make -j$(sysctl -n hw.logicalcpu)
           make install
       - uses: actions/upload-artifact@v4
