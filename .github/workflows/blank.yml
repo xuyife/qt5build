@@ -14,7 +14,7 @@ jobs:
       - name: Build Qt
         shell: cmd
         run: |
-          curl -L -o qt.tar.xz https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
+          curl -L -o qt.tar.xz https://mirror.nju.edu.cn/qt/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
           tar xf qt.tar.xz
           cd qt-everywhere-src-5.15.9
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
@@ -37,7 +37,7 @@ jobs:
           sudo apt-get install -y build-essential libgl1-mesa-dev libxcb-*-dev libx11-xcb-dev libxkbcommon-x11-dev python3
       - name: Build Qt
         run: |
-          wget -q https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
+          wget -q https://mirror.nju.edu.cn/qt/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
           tar xf qt-everywhere-opensource-src-5.15.9.tar.xz
           cd qt-everywhere-src-5.15.9
           ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtdeclarative -skip qtwebengine -prefix $PWD/build
@@ -57,14 +57,14 @@ jobs:
         run: brew install xz
       - name: Build Qt
         run: |
-          curl -L -o qt.tar.xz https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
+          curl -L -o qt.tar.xz https://mirror.nju.edu.cn/qt/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
           tar xf qt.tar.xz
           cd qt-everywhere-src-5.15.9
+          export CMAKE_OSX_ARCHITECTURES=arm64
           ./configure -release -opensource -confirm-license \
             -nomake examples -nomake tests \
             -skip qtdeclarative -skip qtwebengine \
-            -prefix $PWD/build \
-            -- -DCMAKE_OSX_ARCHITECTURES=arm64
+            -prefix $PWD/build
           make -j$(sysctl -n hw.logicalcpu)
           make install
       - uses: actions/upload-artifact@v4
