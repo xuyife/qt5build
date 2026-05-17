@@ -61,6 +61,8 @@ jobs:
           tar xf qt.tar.xz
           cd qt-everywhere-src-5.15.9
           export CMAKE_OSX_ARCHITECTURES=arm64
+          export LDFLAGS="-framework Accelerate"
+          export CFLAGS="-framework Accelerate"
           ./configure -release -opensource -confirm-license \
             -nomake examples -nomake tests \
             -skip qtwebengine \
