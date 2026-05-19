@@ -1,34 +1,50 @@
+
 name: Build Qt 5.15.9
 on: [push, workflow_dispatch]
 
 jobs:
-  # macOS arm64
-  macos-arm64:
-    runs-on: macos-latest
+  # Windows x86_64
+  windows-x64:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Build Qt
+        shell: cmd
+        run: |
+          python -c "import urllib.request; urllib.request.urlretrieve('https://download.qt.io/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz', 'qt.tar.xz')"
+          tar xf qt.tar.xz
+          cd qt-everywhere-src-5.15.24
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          configure.bat -release -opensource -confirm-license -nomake examples -nomake tests -skip qtwebengine -prefix %CD%\build
+          nmake
+          nmake install
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qt5-windows-x64
+          path: qt-everywhere-src-5.15.9/build
+
+  # Linux x86_64
+  linux-x64:
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          brew install xz
-          brew install libpng
-          echo "libpng location:"
-          brew --prefix libpng
+          sudo apt-get update
+          sudo apt-get install -y build-essential libgl1-mesa-dev libxcb-*-dev libx11-xcb-dev libxkbcommon-x11-dev python3
       - name: Build Qt
         run: |
-          curl -L -o qt.tar.xz https://mirror.nju.edu.cn/qt/archive/qt/5.15/5.15.9/single/qt-everywhere-opensource-src-5.15.9.tar.xz
-          tar xf qt.tar.xz
-          cd qt-everywhere-src-5.15.9
-          export CMAKE_OSX_ARCHITECTURES=arm64
-          export LIBPNG_CFLAGS="-I$(brew --prefix libpng)/include"
-          export LIBPNG_LIBS="-L$(brew --prefix libpng)/lib -lpng"
-          ./configure -release -opensource -confirm-license \
-            -nomake examples -nomake tests \
-            -skip qtwebengine \
-            -system-libpng \
-            -prefix $PWD/build
-          make
+          wget -q https://download.qt.io/archive/qt/5.15/5.15.24/single/qt-everywhere-opensource-src-5.15.24.tar.xz
+          tar xf qt-everywhere-opensource-src-5.15.24.tar.xz
+          cd qt-everywhere-src-5.15.24
+          ./configure -release -opensource -confirm-license -nomake examples -nomake tests -skip qtwebengine -prefix $PWD/build
+          make -j$(nproc)
           make install
       - uses: actions/upload-artifact@v4
         with:
-          name: qt5-macos-arm64
+          name: qt5-linux-x64
           path: qt-everywhere-src-5.15.9/build
